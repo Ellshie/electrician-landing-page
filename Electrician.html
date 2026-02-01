@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RobotsHelper | The AI Receptionist for Electricians</title>
+    
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        /* --- CSS RESET & VARIABLES --- */
+        :root {
+            --primary-accent: #EAB308; /* New Gold/Amber 500 */
+            --primary-hover: #D97706; /* Amber 700 for darker hover and text contrast */
+            --bg-white: #FFFFFF;
+            --bg-off-white: #F8F8F8;
+            --text-primary: #1E293B; /* Deep Navy Slate */
+            --text-secondary: #475569; /* Slate 600 */
+            --nav-border: #E2E8F0;
+            --card-bg: #FFFFFF;
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --success: #16a34a;
+            --danger: #dc2626;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-white);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3, h4, h5 {
+            font-weight: 700;
+            line-height: 1.2;
+            color: #1E293B!important;
+        }
+
+        h1 { font-size: 2.8rem; letter-spacing: -1px; }
+        h2 { font-size: 2.2rem; margin-bottom: 1rem; letter-spacing: -0.5px; }
+        h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        
+        p { color: var(--text-secondary); margin-bottom: 1rem; font-size: 1.05rem; font-weight: 400; }
+        strong { color: var(--text-primary); font-weight: 600; }
+
+        .text-gold { color: #EAB308; /* Use darker shade for better contrast on white background */ }
+        .text-center { text-align: center; }
+        .text-uppercase { text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- LAYOUT UTILITIES --- */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-padding { padding: 80px 0; }
+        
+        .bg-white { background-color: var(--bg-white); }
+        .bg-gray { background-color: var(--bg-off-white); }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .flex-center { display: flex; justify-content: center; align-items: center; }
+
+        /* --- NAVIGATION --- */
+        nav {
+            background-color: var(--bg-white);
+            border-bottom: 1px solid var(--nav-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        /* Adjust logo size */
+.logo-container .site-logo {
+    height: 40px;      /* Adjust this value to make it smaller or bigger */
+    width: auto;       /* Maintains aspect ratio */
+    vertical-align: middle; /* Aligns logo with text */
+    margin-right: 8px; /* Adds space between logo and text */
+}
+
+/* Optional: Adjust the text next to the logo */
+.logo-container {
+    display: flex;
+    align-items: center; /* Vertically centers logo and text */
+    font-size: 1.2rem;   /* Adjust text size if needed */
+    font-weight: bold;
+}
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            font-weight: 500;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-accent); /* Highlight on hover */
+        }
+        
+        /* Active link style */
+        .nav-links a.active-link {
+            color: var(--primary-accent);
+            font-weight: 700;
+        }
+
+        /* --- BUTTONS --- */
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-accent);
+            color: var(--text-primary); /* Dark text on gold button */
+            font-weight: 700;
+            padding: 16px 36px;
+            border-radius: 50px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            box-shadow: 0 10px 20px rgba(234, 179, 8, 0.25); /* Adjusted shadow color */
+            cursor: pointer;
+            border: none;
+            transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #1E293B;
+            transform: translateY(-2px);
+            color: #FFFFFF; /* Adjusted shadow color */
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary-accent);
+            color: var(--primary-hover);
+            box-shadow: none;
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-accent);
+            color: var(--text-primary);
+        }
+
+        .btn-sm {
+            padding: 10px 24px;
+            font-size: 0.9rem;
+            box-shadow: none;
+        }
+
+        /* --- TOOLTIPS --- */
+        .tooltip-container {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+            border-bottom: 1px dashed #cbd5e1;
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: 220px;
+            background-color: var(--text-primary);
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 10;
+            bottom: 135%;
+            left: 50%;
+            margin-left: -110px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.85rem;
+            font-weight: 400;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            line-height: 1.4;
+        }
+
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--text-primary) transparent transparent transparent;
+        }
+
+        .tooltip-container:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            background-color: var(--bg-white);
+            padding-top: 60px;
+            padding-bottom: 80px;
+        }
+
+        .vsl-box {
+            background-color: #000;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 800px;
+            aspect-ratio: 16/9;
+            margin: 50px auto 0;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .play-btn {
+            font-size: 5rem;
+            color: var(--primary-accent); /* Use new accent color */
+            opacity: 0.9;
+            transition: 0.3s;
+            z-index: 2;
+        }
+
+        .vsl-box:hover .play-btn { transform: scale(1.1); opacity: 1; }
+
+        /* --- FEATURE GRID --- */
+        .feature-card {
+            background-color: var(--bg-white);
+            padding: 35px;
+            border-radius: 16px;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-accent); /* Use new accent color */
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: #EAB308; /* Use darker gold for icon color */
+            margin-bottom: 20px;
+            background: #fffbeb;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        /* --- PRICING --- */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid #e2e8f0;
+            position: relative;
+            box-shadow: var(--card-shadow);
+        }
+
+        .pricing-card.recommended {
+            border: 2px solid var(--primary-accent); /* Use new accent color */
+            background: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%);
+            transform: scale(1.02);
+            z-index: 10;
+        }
+
+        .badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-accent); /* Use new accent color */
+            color: var(--text-primary);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .price-large {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin: 20px 0 0 0;
+            letter-spacing: -1px;
+        }
+
+        .price-sub { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; }
+
+        .feature-list li {
+            margin-bottom: 14px;
+            display: flex;
+            align-items: flex-start;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+
+        .feature-list i { color: var(--success); margin-right: 12px; margin-top: 4px; }
+
+        /* --- COMPARISON TABLE --- */
+        .table-wrapper { overflow-x: auto; background: white; border-radius: 12px; box-shadow: var(--card-shadow); }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 20px 25px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f8fafc;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td { color: var(--text-secondary); }
+        
+        tr:last-child td { border-bottom: none; }
+
+        .col-highlight {
+            background-color: #fffbeb;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        /* REMOVE ALL TABLE LINES */
+.table-wrapper table,
+.table-wrapper th,
+.table-wrapper td {
+    border: none !important;
+}
+
+.table-wrapper tr {
+    border: none !important;
+}
+
+
+        /* --- FAQ --- */
+        .faq-item {
+            background-color: var(--card-bg);
+            margin-bottom: 15px;
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #e2e8f0;
+            transition: 0.3s;
+        }
+        
+        .faq-item:hover { border-color: #cbd5e1; }
+        
+        .faq-question { font-weight: 700; font-size: 1.1rem; color: var(--text-primary); margin-bottom: 8px; }
+        .faq-answer { color: var(--text-secondary); font-size: 1rem; line-height: 1.6; }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            .grid-2, .grid-3, .pricing-grid { grid-template-columns: 1fr; }
+            .pricing-card.recommended { transform: none; margin-top: 30px; }
+            .nav-links { display: none; } /* Simple hide for mobile, normally adds hamburger */
+            
+            .tooltip-text {
+                width: 200px;
+                left: 0;
+                margin-left: -50px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION -->
+    <nav>
+        <div class="container nav-inner">
+            <div class="logo-container">
+                <i class="fas fa-robot text-gold"></i> ROBOTS<span class="text-gold">HELPER</span>
+            </div>
+            <div class="nav-links">
+                <a href="#problem">The Problem</a>
+                <a href="#solution">How It Works</a>
+                <a href="#reviews">Reviews</a>
+                <a href="#pricing">Pricing</a>
+            </div>
+            <div>
+                <a href="https://calendly.com/robotshelper/robots-helper-ai-phone-agent-enterprise-pricing" class="btn btn-sm">Book Demo</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION (White) -->
+    <section class="hero bg-white">
+        <div class="container text-center">
+            <h1>Your Hands Are In A Live Panel.<br><span class="text-gold">And Your Phone Just Rang.</span></h1>
+            <p style="font-size: 1.25rem; max-width: 700px; margin: 20px auto;">
+                Meet the AI Dispatcher that answers calls instantly, books high-value panel upgrades, and filters out the "I just have a quick question" tire-kickers. <br>
+                <strong>Stop losing $5,000 rewires to voicemail.</strong>
+            </p>
+
+            <a href="#vsl-section" class="btn" style="text-decoration: none;">Watch How It Works <i class="fas fa-play-circle" style="margin-left: 8px;"></i></a>
+
+            <p style="font-size: 0.9rem; margin-top: 15px; color: var(--text-secondary);">
+                <i class="fas fa-star text-gold"></i> Used by 250+ Electrical Contractors
+            </p>
+
+            <!-- VSL PLACEHOLDER -->
+            <div id="vsl-section" class="vsl-box">
+                <div class="play-btn"><i class="fas fa-play-circle"></i></div>
+                <div style="position: absolute; bottom: 20px; color: #fff; background: rgba(0,0,0,0.7); padding: 5px 15px; border-radius: 50px; font-weight: 600; font-size: 0.9rem;">
+                    WATCH 2 MIN DEMO
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VSL INTRO / HOOK (Dirty White) -->
+    <section class="section-padding bg-gray">
+        <div class="container text-center" style="max-width: 800px;">
+            <h2 class="text-gold">Why Every Electrician Needs to Watch This</h2>
+            <p style="color: var(--text-primary); font-size: 1.1rem; font-weight: 500;">
+                You didn’t start an electrical business to play "dispatch tag" at 7 PM while trying to eat dinner with your family.
+            </p>
+            <p>
+                Most contractors lose <strong>30-40% of their revenue</strong> simply because they can't answer the phone while driving between jobs or working on a ladder. 
+                <br><br>
+                RobotsHelper isn’t a dumb voicemail system. It’s an intelligent AI agent that sounds human, knows the difference between a breaker trip and a full outage, and works 24/7/365.
+            </p>
+        </div>
+    </section>
+
+    <!-- PROBLEM SECTION (White) -->
+    <section id="problem" class="section-padding bg-white">
+        <div class="container">
+            <h2 class="text-center mb-5">The "Profit Killers" of Your Electrical Business</h2>
+            <div class="grid-3">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-phone-slash"></i></div>
+                    <h3>The Missed Panel Upgrade</h3>
+                    <p>You're deep in a crawlspace. Phone rings. You ignore it. That was a 200-amp service upgrade. They called the next guy on Google. You just lost $4,000.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-user-clock"></i></div>
+                    <h3>The "Free Advice" Shopper</h3>
+                    <p>You drive 30 minutes just to hear, "I bought this ceiling fan at Home Depot, can you tell me how to wire it for free?" Wasted gas. Wasted time.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-moon"></i></div>
+                    <h3>The Sunday Night Outage</h3>
+                    <p>Main breaker blows during the big game. You're off the clock. They don't leave a voicemail; they just call the big franchise who answers instantly.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOLUTION SECTION (Dirty White) -->
+    <section id="solution" class="section-padding bg-gray">
+        <div class="container">
+            <div class="grid-2" style="align-items: center;">
+                <div>
+                    <h2 class="text-gold">We Clone Your Best Dispatcher (But Make Them Work 24/7)</h2>
+                    <p>RobotsHelper integrates directly with your ServiceTitan, Jobber, or HouseCall Pro.</p>
+                    <ul class="feature-list" style="font-size: 1.1rem;">
+                        <li><i class="fas fa-check-circle text-gold"></i> <strong>Instant Answer:</strong> Pick up on the first ring, even while you're wiring a house.</li>
+                        <li><i class="fas fa-check-circle text-gold"></i> <strong>Smart Triage:</strong> "Is half your power out, or just one outlet?" (We qualify the job properly).</li>
+                        <li><i class="fas fa-check-circle text-gold"></i> <strong>Direct Booking:</strong> We put the job straight into your CRM calendar.</li>
+                        <li><i class="fas fa-check-circle text-gold"></i> <strong>Crisis Management:</strong> We text your on-call tech only for <em>urgent safety hazards</em>.</li>
+                    </ul>
+                </div>
+                <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0;">
+                    <h4 class="text-center mb-3 text-gold">Real World Example</h4>
+                    <p style="font-style: italic; color: var(--text-primary);">"Mike from Voltage Bros was installing a generator. His phone rang. RobotsHelper answered, qualified the lead as a 'Burning Smell from Panel', quoted the emergency dispatch fee, and booked the job for 2 PM. Mike saw the text, smiled, and kept working."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES GRID (White) -->
+    <section class="section-padding bg-white">
+        <div class="container">
+            <h2 class="text-center">Built Specifically for Sparkies</h2>
+            <br>
+            <div class="grid-3">
+                <!-- Feature 1 -->
+                <div class="feature-card">
+                    <h3><i class="fas fa-headset text-gold"></i> 24/7 Call Handling</h3>
+                    <p><strong>Example:</strong> A storm hits. 50 calls come in at once. Your Robot answers every single one while you prioritize the high-paying emergency jobs.</p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="feature-card">
+                    <h3><i class="fas fa-filter text-gold"></i> Lead Qualification</h3>
+                    <p><strong>Example:</strong> "Are your breakers tripping?" We ask the technical questions so you know exactly what parts to bring before you arrive.</p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="feature-card">
+                    <h3><i class="fas fa-calendar-check text-gold"></i> CRM Sync</h3>
+                    <p><strong>Example:</strong> Real-time 2-way sync with ServiceTitan/Jobber. We never double-book you on a rough-in day.</p>
+                </div>
+                <!-- Feature 4 -->
+                <div class="feature-card">
+                    <h3><i class="fas fa-shield-alt text-gold"></i> Spam Filtering</h3>
+                    <p><strong>Example:</strong> "We've been trying to reach you about your Google Listing." *Click*. The Robot hangs up so you don't break your concentration.</p>
+                </div>
+                <!-- Feature 5 -->
+                <div class="feature-card">
+                    <h3><i class="fas fa-file-invoice-dollar text-gold"></i> Diagnostic Fees</h3>
+                    <p><strong>Example:</strong> The AI informs the customer of your $189 dispatch fee <em>before</em> booking, ensuring they aren't looking for a freebie.</p>
+                </div>
+                <!-- Feature 6 -->
+                <div class="feature-card">
+                    <h3><i class="fas fa-comment-sms text-gold"></i> SMS Notifications</h3>
+                    <p><strong>Example:</strong> You get a text instantly: "New Job Booked: Total Power Loss - 456 Elm St - Urgent."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOCIAL PROOF (Dirty White) -->
+    <section id="reviews" class="section-padding bg-gray">
+        <div class="container text-center">
+            <h2 class="mb-5">From "Overworked Owner" to "Profitable CEO"</h2>
+            <div class="grid-3">
+                <div class="feature-card">
+                    <p class="mb-3 text-gold"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></p>
+                    <p>"I was skeptical. But last month it booked two EV charger installs and a full rewire while I was sleeping. It pays for itself in one day."</p>
+                    <strong>- Mark T., WireRight Electric</strong>
+                </div>
+                <div class="feature-card">
+                    <p class="mb-3 text-gold"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></p>
+                    <p>"I used to pay a call center $3 a minute to butcher my company name. This AI sounds better than me. The Housecall Pro sync is flawless."</p>
+                    <strong>- Jason B., City Lights & Power</strong>
+                </div>
+                <div class="feature-card">
+                    <p class="mb-3 text-gold"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></p>
+                    <p>"It screens out the people who want me to hang a chandelier for $50. Now I only drive out for the real money."</p>
+                    <strong>- Tom R., Arc Flash Solutions</strong>
+                </div>
+            </div>
+
+            <!-- Before / After Block -->
+            <div class="grid-2 mt-5" style="max-width: 800px; margin: 50px auto 0;">
+                <div style="background: #fef2f2; padding: 30px; border: 1px solid #fecaca; border-radius: 16px;">
+                    <h4 class="text-uppercase" style="color: var(--danger);">Before RobotsHelper</h4>
+                    <ul class="text-left mt-3" style="font-size: 0.95rem;">
+                        <li><i class="fas fa-times" style="color: var(--danger); margin-right: 8px;"></i> Answering calls in attics</li>
+                        <li><i class="fas fa-times" style="color: var(--danger); margin-right: 8px;"></i> Writing addresses on drywall scraps</li>
+                        <li><i class="fas fa-times" style="color: var(--danger); margin-right: 8px;"></i> Waking up for non-emergencies</li>
+                        <li><i class="fas fa-times" style="color: var(--danger); margin-right: 8px;"></i> Losing rewires to big franchises</li>
+                    </ul>
+                </div>
+                <div style="background: #f0fdf4; padding: 30px; border: 1px solid #bbf7d0; border-radius: 16px;">
+                    <h4 class="text-uppercase" style="color: var(--success);">After RobotsHelper</h4>
+                    <ul class="text-left mt-3" style="font-size: 0.95rem;">
+                        <li><i class="fas fa-check" style="color: var(--success); margin-right: 8px;"></i> 100% Answer Rate</li>
+                        <li><i class="fas fa-check" style="color: var(--success); margin-right: 8px;"></i> Jobs booked automatically</li>
+                        <li><i class="fas fa-check" style="color: var(--success); margin-right: 8px;"></i> Payment terms agreed upfront</li>
+                        <li><i class="fas fa-check" style="color: var(--success); margin-right: 8px;"></i> Calendar full every morning</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING SECTION (White) -->
+    <section class="section-padding bg-white" id="pricing">
+        <div class="container text-center">
+            <h2 class="mb-2">Choose Your Dispatch Power Level</h2>
+            <p class="mb-5">Transparent pricing. No hidden contracts. Cancel anytime.</p>
+            
+            <div class="pricing-grid">
+                <!-- OFFER 1 -->
+                <div class="pricing-card">
+                    <h3>The 24/7 Booking Agent</h3>
+                    <p class="price-sub">Best for Owner-Operators (1–3 Trucks)</p>
+                    
+                    <div class="price-large">$497<span style="font-size: 1rem; color: var(--text-secondary); font-weight: 500;">/mo</span></div>
+                    <p class="price-sub">Includes 300 calls/mo<br>($1.50/call overage)</p>
+                    
+                    <div style="margin-bottom: 25px; padding: 15px; background: #f1f5f9; border-radius: 12px; font-size: 0.9rem;">
+                        <strong>Setup Fee: $499</strong>
+                        <div style="font-size: 0.8rem; margin-top: 5px; color: var(--text-secondary);">Script writing, Calendar Sync, 3-Day Testing</div>
+                    </div>
+
+                    <ul class="feature-list text-left">
+                        <li><i class="fas fa-check"></i> <span class="tooltip-container">24/7 Smart Answering <span class="tooltip-text">We answer calls instantly, any time of day.</span></span></li>
+                        <li><i class="fas fa-check"></i> <span class="tooltip-container">Tire-Kicker Filtering <span class="tooltip-text">We ask qualifying questions to ensure the lead has budget.</span></span></li>
+                        <li><i class="fas fa-check"></i> <span class="tooltip-container">Google Calendar / Calendly Sync <span class="tooltip-text">Simple integration for smaller teams.</span></span></li>
+                        <li><i class="fas fa-check"></i> <span class="tooltip-container">Emergency Escalation <span class="tooltip-text">We call your cell only if it's a true safety hazard.</span></span></li>
+                        <li><i class="fas fa-check"></i> <span class="tooltip-container">Spam Blocking <span class="tooltip-text">We filter out robocalls automatically.</span></span></li>
+                    </ul>
+
+                    <a href="https://buy.stripe.com/cNi00ldCx0ao40g5CfdQQ06" class="btn btn-outline" style="width: 100%; margin-top: 25px; text-decoration: none;">Get Started</a>
+                </div>
+
+                <!-- OFFER 2 -->
+                <div class="pricing-card recommended">
+                    <div class="badge">RECOMMENDED</div>
+                    <h3>The AI Dispatch Manager</h3>
+                    <p class="price-sub">Best for Growing Shops (4+ Trucks)</p>
+                    
+                    <div class="price-large">$997<span style="font-size: 1rem; color: var(--text-secondary); font-weight: 500;">/mo</span></div>
+                    <p class="price-sub">Includes 800 calls/mo<br>($1.25/call overage)</p>
+                    
+                    <div style="margin-bottom: 25px; padding: 15px; background: #fffbeb; border-radius: 12px; font-size: 0.9rem; border: 1px solid #fcd34d;">
+                        <strong style="color: #EAB308;">Implementation Fee: $1,499</strong>
+                        <div style="font-size: 0.8rem; margin-top: 5px; color: #1E293B;">Deep CRM Integration, Decision Trees, 2-Week Calibration</div>
+                    </div>
+
+                    <ul class="feature-list text-left">
+                        <li><i class="fas fa-check"></i> <strong>Everything in Offer 1</strong></li>
+                        <li><i class="fas fa-check"></i> <span class="tooltip-container">Deep CRM Injection <span class="tooltip-text">Full 2-way sync with ServiceTitan, HCP, or Jobber.</span></span></li>
+                        <li><i class="fas fa-check"></i> <span class="tooltip-container">Zone-Based Scheduling <span class="tooltip-text">We book jobs based on your truck's location zones.</span></span></li>
+                        <li><i class="fas fa-check"></i> <span class="tooltip-container">Dispatch Fee Collection <span class="tooltip-text">We inform customers of fees upfront.</span></span></li>
+                        <li><i class="fas fa-check"></i> <span class="tooltip-container">Custom Voice Cloning <span class="tooltip-text">The AI can sound exactly like you or your office manager.</span></span></li>
+                        <li><i class="fas fa-check"></i> <span class="tooltip-container">Bi-Weekly Optimization Audits <span class="tooltip-text">Call logs reviewed every 2 weeks to boost conversion rates.</span></span></li>
+                        <li><i class="fas fa-check"></i> <span class="tooltip-container">Priority Support <span class="tooltip-text">Dedicated account manager.</span></span></li>
+                    </ul>
+
+                    <a href="https://buy.stripe.com/7sY00laql2iw40g3u7dQQ07" class="btn" style="width: 100%; margin-top: 25px; text-decoration: none;">Deploy AI Dispatcher</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMPARISON TABLE (Dirty White) -->
+    <section id="comparison-table" class="section-padding bg-gray">
+        <div class="container">
+            <h2 class="text-center">Stop Overpaying for Humans</h2>
+            <div class="table-wrapper mt-5">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Comparison</th>
+                            <th>Traditional Receptionist</th>
+                            <th>Call Centers</th>
+                            <th class="col-highlight">RobotsHelper AI</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Cost</strong></td>
+                            <td>$3,000+/mo</td>
+                            <td>$2.00 - $3.00/min</td>
+                            <td class="col-highlight"><strong>$497/mo flat</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Availability</strong></td>
+                            <td>9 AM - 5 PM</td>
+                            <td>24/7 (but long hold times)</td>
+                            <td class="col-highlight"><strong>24/7 Instant</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Trade Knowledge</strong></td>
+                            <td>Low</td>
+                            <td>Zero (Reads scripts blindly)</td>
+                            <td class="col-highlight"><strong>High (Trained on Electrician FAQs)</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>CRM Integration</strong></td>
+                            <td>Manual Entry</td>
+                            <td>Email Only</td>
+                            <td class="col-highlight"><strong>Instant & Direct</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Missed Calls</strong></td>
+                            <td>Sick days / Lunch breaks</td>
+                            <td>Shift changes</td>
+                            <td class="col-highlight"><strong>Zero. Never.</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ SECTION (White) -->
+    <section id="faq" class="section-padding bg-white">
+        <div class="container" style="max-width: 800px;">
+            <h2 class="text-center mb-5">Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">Is the AI better than a real dispatcher?</div>
+                <div class="faq-answer">It's faster, cheaper, and never sleeps. While it lacks "human intuition," it follows your script perfectly 100% of the time. It won't forget to ask for the gate code, and it won't forget to quote the dispatch fee.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Can it handle complex electrical questions?</div>
+                <div class="faq-answer">It handles the intake. If a customer asks complex code questions, the AI says: "That sounds like a specific question for our Master Electrician. Let me get him on the schedule to come out and take a look." This converts questions into paid service calls.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">What happens after hours?</div>
+                <div class="faq-answer">The AI works 24/7. It handles the 2 AM calls so you don't have to. It books routine jobs for the next morning or wakes you up ONLY if it meets your specific criteria (e.g., Hospital, Restaurant Down, Fire Hazard).</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Can it book jobs in ServiceTitan?</div>
+                <div class="faq-answer">Absolutely. We specialize in ServiceTitan, Housecall Pro, and Jobber integrations. We read your live schedule and inject the job directly into the correct zone.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Does it sound robotic?</div>
+                <div class="faq-answer">No. We use advanced neural voice technology. It includes natural pauses, "umms," and intonation. Most customers assume they are speaking to a polite office assistant.</div>
+            </div>
+             <div class="faq-item">
+                <div class="faq-question">Is there a contract?</div>
+                <div class="faq-answer">No. RobotsHelper is month-to-month. You can cancel anytime if you feel it's not adding value (but once you see the booked revenue, you won't).</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL CTA (Dirty White) -->
+    <section class="section-padding text-center bg-gray" style="border-top: 1px solid #e2e8f0;">
+        <div class="container">
+            <h2 style="font-size: 2.5rem; margin-bottom: 20px;">Ready to Never Miss a Job Again?</h2>
+            <p style="font-size: 1.25rem; margin-bottom: 40px; color: var(--text-secondary);">Your competitors are still using voicemail. Get the unfair advantage.</p>
+            <a href="https://calendly.com/robotshelper/robots-helper-ai-phone-agent-enterprise-pricing" class="btn" style="padding: 20px 50px; font-size: 1.3rem; text-decoration: none;">Book Your Demo Now</a>
+           
+        </div>
+    </section>
+
+       <footer style="background-color: #1e293b; padding: 15px 0; text-align: center; color: #94a3b8; font-size: 0.9rem;">
+        <div class="container">
+           <div class="logo-container" style="display: flex; align-items: center; justify-content: center;">
+                <img src="https://robotshelper.com/wp-content/uploads/2025/10/Robotshelper-Icon.webp" alt="RobotsHelper Logo" class="site-logo">
+                <span style="color: #ffffff;">RobotsHelper</span>
+            </div>
+            <p style="color: #ffffff;">&copy; 2025 RobotsHelper AI Solutions. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Simple script to handle active link state based on scroll position/click
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.nav-links a');
+            
+            // Function to remove all active classes and add to the target
+            const setActiveLink = (targetId) => {
+                navLinks.forEach(link => {
+                    link.classList.remove('active-link');
+                });
+
+                // Find the link whose href matches the current section ID (e.g., #problem)
+                const activeLink = Array.from(navLinks).find(link => link.getAttribute('href') === '#' + targetId);
+                if (activeLink) {
+                    activeLink.classList.add('active-link');
+                }
+            };
+            
+            // Function to determine the current active section based on scroll position
+            const updateActiveLink = () => {
+                let currentSectionId = '';
+                // Get all sections that have an ID and are used in the nav
+                const sections = document.querySelectorAll('#problem, #solution, #reviews, #pricing');
+                
+                // Get the scroll position (with a slight offset for the sticky nav)
+                const scrollOffset = 100;
+
+                sections.forEach(section => {
+                    const rect = section.getBoundingClientRect();
+                    // Check if the section's top is below the offset and its bottom is above the viewport
+                    if (rect.top <= scrollOffset && rect.bottom >= scrollOffset) {
+                        currentSectionId = section.id;
+                    }
+                });
+                
+                // If no section is found (e.g., in the hero section at the top), 
+                // default to the first link, which is 'The Problem'.
+                if(currentSectionId) {
+                    setActiveLink(currentSectionId);
+                } else if (window.scrollY < document.getElementById('problem').offsetTop - scrollOffset) {
+                     setActiveLink('problem'); 
+                }
+            };
+
+            // Initial set on load
+            updateActiveLink();
+
+            // Set active on click (helps ensure immediate feedback)
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    // Use a short delay to allow smooth scrolling to start before updating the state
+                    setTimeout(() => {
+                        const targetId = this.getAttribute('href').substring(1);
+                        setActiveLink(targetId);
+                    }, 50); 
+                });
+            });
+
+            // Set active on scroll
+            window.addEventListener('scroll', updateActiveLink);
+            window.addEventListener('resize', updateActiveLink);
+        });
+    </script>
+
+</body>
+</html>
